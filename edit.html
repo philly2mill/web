@@ -5,6 +5,8 @@
 </head>
 <body>
 
+<h2>Edit Data</h2>
+
 <nav>
   <a href="index.html">Home</a>
   <a href="view.html">View</a>
@@ -12,10 +14,79 @@
   <a href="edit.html">Edit</a>
 </nav>
 
-<h2>Edit Data</h2>
+<select id="recordSelect"></select>
+<br><br>
 
-<ul id="editList"></ul>
+<input type="text" id="editName" placeholder="Edit name">
+<br><br>
 
-<script src="script.js"></script>
+<button onclick="updateData()">Update</button>
+
+<script>
+const API_URL = "https://web-nt0n.onrender.com/data";
+
+let records = [];
+
+// Load dropdown
+async function loadDropdown() {
+  try {
+    const res = await fetch(API_URL);
+    records = await res.json();
+
+    const dropdown = document.getElementById("recordSelect");
+    dropdown.innerHTML = "";
+
+    records.forEach(record => {
+      const option = document.createElement("option");
+      option.value = record.id;
+      option.textContent = record.name;
+      dropdown.appendChild(option);
+    });
+
+    loadSelected();
+
+  } catch (err) {
+    console.error("Error loading dropdown:", err);
+  }
+}
+
+// Auto-fill selected record
+function loadSelected() {
+  const selectedId = document.getElementById("recordSelect").value;
+  const record = records.find(r => r.id == selectedId);
+
+  if (record) {
+    document.getElementById("editName").value = record.name;
+  }
+}
+
+// Update record (PUT)
+async function updateData() {
+  const id = document.getElementById("recordSelect").value;
+  const name = document.getElementById("editName").value;
+
+  try {
+    await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name })
+    });
+
+    alert("Record updated successfully!");
+
+  } catch (err) {
+    console.error("Error updating data:", err);
+  }
+}
+
+// Event listener
+document.getElementById("recordSelect").addEventListener("change", loadSelected);
+
+// Load data on page load
+loadDropdown();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>View Data</title>
+</head>
+<body>
+
+<h2>View Data</h2>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="view.html">View</a>
+  <a href="add.html">Add</a>
+  <a href="edit.html">Edit</a>
+</nav>
+
+<ul id="dataList"></ul>
+
+<script>
+const API_URL = "https://web-nt0n.onrender.com/data";
+
+async function loadData() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const list = document.getElementById("dataList");
+    list.innerHTML = "";
+
+    data.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = `${item.id}: ${item.name}`;
+      list.appendChild(li);
+    });
+
+  } catch (err) {
+    console.error("Error loading data:", err);
+  }
+}
+
+loadData();
+</script>
+
+</body>
+</html>
