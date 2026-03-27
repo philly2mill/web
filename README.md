@@ -36,4 +36,6 @@ The application uses HTML, JavaScript, and browser localStorage for data persist
 
 ---
 
-## Project Structure
+How to test locally
+API URL: https://web-nt0n.onrender.com/data
+Deployment link: GitHub Pages
